@@ -145,6 +145,7 @@ public abstract class TUnion<T extends TUnion, F extends TFieldIdEnum> implement
     // this way.
     iprot.readFieldBegin();
     iprot.readStructEnd();
+    validate();
   }
 
   public void setFieldValue(F fieldId, Object value) {
@@ -156,11 +157,15 @@ public abstract class TUnion<T extends TUnion, F extends TFieldIdEnum> implement
   public void setFieldValue(int fieldId, Object value) {
     setFieldValue(enumForId((short)fieldId), value);
   }
+  
+  protected void validate() throws TException {
+    if (getSetField() == null || getFieldValue() == null) {
+      throw new TProtocolException("TUnion must have a set value when serializing or deserializing!");
+    }
+  }
 
   public void write(TProtocol oprot) throws TException {
-    if (getSetField() == null || getFieldValue() == null) {
-      throw new TProtocolException("Cannot write a TUnion with no set value!");
-    }
+    validate();
     oprot.writeStructBegin(getStructDesc());
     oprot.writeFieldBegin(getFieldDesc(setField_));
     writeValue(oprot);
