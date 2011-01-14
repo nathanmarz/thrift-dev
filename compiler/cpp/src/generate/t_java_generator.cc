@@ -1013,6 +1013,12 @@ void t_java_generator::generate_union_comparisons(ofstream& out, t_struct* tstru
   indent(out) << "    Object myValue = getFieldValue();" << endl;
   indent(out) << "    if (myValue instanceof byte[]) {" << endl;
   indent(out) << "      return TBaseHelper.compareTo((byte[])myValue, (byte[])other.getFieldValue());" << endl;
+  indent(out) << "    } else if (myValue instanceof List) {" << endl;
+  indent(out) << "      return TBaseHelper.compareTo((List)myValue, (List)other.getFieldValue());" << endl;
+  indent(out) << "    } else if (myValue instanceof Set) {" << endl;
+  indent(out) << "      return TBaseHelper.compareTo((Set)myValue, (Set)other.getFieldValue());" << endl;
+  indent(out) << "    } else if (myValue instanceof Map){" << endl;
+  indent(out) << "      return TBaseHelper.compareTo((Map)myValue, (Map)other.getFieldValue());" << endl;
   indent(out) << "    } else {" << endl;
   indent(out) << "      return TBaseHelper.compareTo((Comparable)myValue, (Comparable)other.getFieldValue());" << endl;
   indent(out) << "    }" << endl;
