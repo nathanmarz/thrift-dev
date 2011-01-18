@@ -297,6 +297,17 @@ void t_py_generator::init_generator() {
 string t_py_generator::render_includes() {
   const vector<t_program*>& includes = program_->get_includes();
   string result = "";
+  string relative = "\"/\".join(__file__.split(\"/\")[:-1]) + \"/..\"";
+  string mymodule = program_->get_namespace("py");
+  if(!mymodule.empty()) {
+      //for every ., add another /.. to the relative path
+      for(unsigned int i=0; i<mymodule.size(); i++) {
+          if(mymodule[i] == '.') {
+              relative += " + \"/..\"";
+          }
+      }
+  }
+  result += "sys.path = [" + relative + "] + sys.path\n";
   for (size_t i = 0; i < includes.size(); ++i) {
     result += "import " + get_real_py_module(includes[i]) + ".ttypes\n";
   }
@@ -336,7 +347,7 @@ string t_py_generator::py_autogen_comment() {
  */
 string t_py_generator::py_imports() {
   return
-    string("from thrift.Thrift import *");
+    string("from thrift.Thrift import *\nimport sys");
 }
 
 /**
