@@ -713,6 +713,24 @@ void t_py_generator::generate_py_struct_definition(ofstream& out,
   indent_down();
   out << endl;
 
+  // add union_value() method to get union values...
+  out <<
+    indent() << "def union_value(self):" << endl;
+  indent_up();
+  out <<
+    indent() << "d = self.__dict__" << endl <<
+    indent() << "for key in d:" << endl;
+  indent_up();
+  out <<
+    indent() << "if d[key]:" << endl;
+  indent_up();
+  out <<
+    indent() << "return d[key]" << endl;
+  indent_down();
+  indent_down();
+  indent_down();
+  out << endl;
+
   indent_down();
 }
 
