@@ -722,10 +722,11 @@ void t_py_generator::generate_py_struct_definition(ofstream& out,
     indent() << "for key in d:" << endl;
   indent_up();
   out <<
-    indent() << "if d[key]:" << endl;
+    indent() << "val = d[key]" << endl <<
+    indent() << "if not val is None:" << endl;
   indent_up();
   out <<
-    indent() << "return d[key]" << endl;
+    indent() << "return val" << endl;
   indent_down();
   indent_down();
   indent_down();
