@@ -51,7 +51,7 @@ class t_py_generator : public t_generator {
 
     iter = parsed_options.find("twisted");
     gen_twisted_ = (iter != parsed_options.end());
-    
+
     iter = parsed_options.find("utf8strings");
     gen_utf8strings_ = (iter != parsed_options.end());
 
@@ -207,7 +207,7 @@ class t_py_generator : public t_generator {
    * True iff we should generate Twisted-friendly RPC services.
    */
   bool gen_twisted_;
-  
+
   /**
    * True iff strings should be encoded using utf-8.
    */
@@ -727,6 +727,43 @@ void t_py_generator::generate_py_struct_definition(ofstream& out,
   indent_up();
   out <<
     indent() << "return val" << endl;
+  indent_down();
+  indent_down();
+  indent_down();
+  out << endl;
+
+  out <<
+    indent() << "def get_set_field(self):" << endl;
+  indent_up();
+  out <<
+    indent() << "for attr in self.__dict__:" << endl;
+  indent_up();
+  out <<
+    indent() << "if not self.__dict__[attr] is None:" << endl;
+  indent_up();
+  out <<
+    indent() << "return attr" << endl;
+  indent_down();
+  indent_down();
+  indent_down();
+  out << endl;
+
+  out <<
+    indent() << "def get_set_field_id(self):" << endl;
+  indent_up();
+  out <<
+    indent() << "for idx, tup in enumerate(self.__class__.thrift_spec):" << endl;
+  indent_up();
+  out <<
+    indent() << "if tup:" << endl;
+  indent_up();
+  out <<
+    indent() << "key = tup[2]" << endl <<
+    indent() << "if not self.__dict__[key] is None:" << endl;
+  indent_up();
+  out <<
+    indent() << "return idx" << endl;
+  indent_down();
   indent_down();
   indent_down();
   indent_down();
